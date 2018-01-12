@@ -135,6 +135,7 @@ jobs:
             echo "working_directory: ${WORKING_DIRECTORY}
             docker_image: ${DOCKER_IMAGE}
             ansible_host: ${STAGING_URL}
+            ansible_user: ${BACKEND_STAGING_ANSIBLE_USER}
             DOCKER_USER: ${DOCKER_USER}
             DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/staging/host_vars/$ANSIBLE_HOSTNAME
       - run: 
