@@ -1,4 +1,4 @@
-FROM node:8.9.3-alpine
+FROM node:8.9.4-alpine
 
 ADD package.json /tmp/package.json
 RUN cd /tmp && yarn

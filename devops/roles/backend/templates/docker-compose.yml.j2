@@ -16,15 +16,8 @@ services:
     links:
       - mongo
     environment:
-      - MONGO_DB_URI=mongodb://mongo:27017/slotmachine
-      - SLACK_API_TOKEN={{ SLACK_API_TOKEN }}
-      - SLACK_VERIFICATION_TOKEN={{ SLACK_VERIFICATION_TOKEN }}
-      - GITHUB_WEBHOOK_RES_URL={{ API_URL }}/repos/hooks
-      - GITHUB_TOKEN={{ GITHUB_TOKEN }}
-      - JENKINS_URL={{JENKINS_URL}}
-      - JENKINS_USERNAME={{JENKINS_USERNAME}}
-      - JENKINS_PASSWORD={{JENKINS_PASSWORD}}
-    command: npm run start
+      - MONGO_DB_URI=mongodb://mongo:27017/{{ mongodb_name }}
+    command: yarn start
 
   mongo:
     image: mongo

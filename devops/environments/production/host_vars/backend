@@ -1,3 +1,4 @@
 docker_compose_version: 1.17.1
-docker_image: fmenkes/node-react-circleci
 nginx_path: nginx.production.conf
+mongodb_name: production
+ansible_user: ubuntu

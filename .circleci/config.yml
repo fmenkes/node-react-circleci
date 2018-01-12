@@ -2,7 +2,7 @@ version: 2
 jobs:
   unit-tests:
     docker:
-      - image: circleci/node:8.9.1
+      - image: node:8.9.4-alpine
     working_directory: ~/circleci
     steps:
       - checkout
@@ -44,7 +44,7 @@ jobs:
 
   eslint:
     docker:
-      - image: circleci/node:8.9.1
+      - image: node:8.9.4-alpine
     working_directory: ~/circleci
     steps:
       - attach_workspace:
@@ -81,12 +81,12 @@ jobs:
       - run:
           name: Build application Docker image
           command: |
-            docker build --cache-from=$DOCKER_HUB_CONTAINER_NAME -t $DOCKER_HUB_CONTAINER_NAME .
+            docker build --cache-from=$DOCKER_IMAGE -t $DOCKER_IMAGE .
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/app.tar $DOCKER_HUB_CONTAINER_NAME
+            docker save -o /caches/app.tar $DOCKER_IMAGE
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
@@ -112,7 +112,7 @@ jobs:
           name: Push image to Docker Hub
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker push $DOCKER_HUB_CONTAINER_NAME
+              docker push $DOCKER_IMAGE
             fi
       - store_test_results:
           path: ~/junit
@@ -130,15 +130,10 @@ jobs:
           name: Append variables to host_vars file
           command: |
             echo "working_directory: ${WORKING_DIRECTORY}
+            docker_image: ${DOCKER_IMAGE}
+            ansible_host: ${STAGING_URL}
             DOCKER_USER: ${DOCKER_USER}
-            DOCKER_PASSWORD: ${DOCKER_PASSWORD}
-            SLACK_API_TOKEN: ${SLACK_API_TOKEN_STAGING}
-            SLACK_VERIFICATION_TOKEN: ${SLACK_VERIFICATION_TOKEN_STAGING}
-            JENKINS_URL: ${JENKINS_URL}
-            JENKINS_USERNAME: ${JENKINS_USERNAME}
-            JENKINS_PASSWORD: ${JENKINS_PASSWORD}
-            API_URL: ${STAGING_URL}
-            GITHUB_TOKEN: ${GITHUB_TOKEN}" >> devops/environments/staging/host_vars/$ANSIBLE_HOSTNAME
+            DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/staging/host_vars/$ANSIBLE_HOSTNAME
       - run: 
           name: Run Ansible playbook
           command: ansible-playbook -i devops/environments/staging/inventory.yml devops/site.yml
@@ -154,15 +149,10 @@ jobs:
           name: Append variables to host_vars file
           command: |
             echo "working_directory: ${WORKING_DIRECTORY}
+            docker_image: ${DOCKER_IMAGE}
+            ansible_host: ${PRODUCTION_URL}
             DOCKER_USER: ${DOCKER_USER}
-            DOCKER_PASSWORD: ${DOCKER_PASSWORD}
-            SLACK_API_TOKEN: ${SLACK_API_TOKEN_PRODUCTION}
-            SLACK_VERIFICATION_TOKEN: ${SLACK_VERIFICATION_TOKEN_PRODUCTION}
-            JENKINS_URL: ${JENKINS_URL}
-            JENKINS_USERNAME: ${JENKINS_USERNAME}
-            JENKINS_PASSWORD: ${JENKINS_PASSWORD}
-            API_URL: ${PRODUCTION_URL}
-            GITHUB_TOKEN: ${GITHUB_TOKEN}" >> devops/environments/production/host_vars/$ANSIBLE_HOSTNAME
+            DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/production/host_vars/$ANSIBLE_HOSTNAME
       - run: 
           name: Run Ansible playbook
           command: ansible-playbook -i devops/environments/production/inventory.yml devops/site.yml

@@ -2,13 +2,13 @@ version: '2'
 
 services:
   web:
-    image: fmenkes/node-react-circleci
+    image: ${DOCKER_IMAGE}
     container_name: web
     links:
       - mongo
     environment:
-      - MONGO_DB_URI=mongodb://mongo:27017/web-test
-    command: npm run test:integration
+      - MONGO_DB_URI=mongodb://mongo:27017/test-db
+    command: yarn test:integration
 
   mongo:
     image: mongo:3.4.10-jessie

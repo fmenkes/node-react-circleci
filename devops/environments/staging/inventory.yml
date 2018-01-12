@@ -2,5 +2,4 @@
 all:
   hosts:
     staging:
-      ansible_host: 
-      ansible_user: ubuntu
+    

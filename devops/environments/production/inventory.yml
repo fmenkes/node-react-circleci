@@ -2,5 +2,3 @@
 all:
   hosts:
     production:
-      ansible_host: 
-      ansible_user: ubuntu
