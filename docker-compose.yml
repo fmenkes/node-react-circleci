@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  node:
+    build: ./backend
+    environment:
+      - MONGO_DB_URI=mongodb://mongo:27017/node-react-circleci
+    ports:
+      - "8080:8080"
+    command: yarn start
+
+  mongo:
+    image: clutteredcode/mongo-alpine
+    expose:
+      - "27017"
+    volumes:
+      - db:/data/db
+
+  mongodata:
+    image: tianon/true
+    volumes:
+      - db:/data/db
+
+volumes:
+  db:

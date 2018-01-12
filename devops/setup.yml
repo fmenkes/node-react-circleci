@@ -2,4 +2,5 @@
 - hosts: backend
   become: yes
   roles:
-    - backend
+    - common
+    - docker

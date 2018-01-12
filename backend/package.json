@@ -1,0 +1,28 @@
+{
+  "name": "circleci-node",
+  "version": "1.0.0",
+  "description": "Sample backend for react-circleci-node",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint -o eslint.html -f html .",
+    "test:unit": "jest unit --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/fmenkes/react-circleci-node"
+  },
+  "author": "fmenkes",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^22.0.6",
+    "jest-junit": "^3.4.1",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
