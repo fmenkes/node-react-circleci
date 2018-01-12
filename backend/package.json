@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "lint": "eslint -o eslint.html -f html .",
-    "test:unit": "jest unit --coverage"
+    "test:unit": "jest unit --coverage",
+    "test:integration": "jest int --forceExit"
   },
   "repository": {
     "type": "git",
