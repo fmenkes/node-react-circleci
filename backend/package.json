@@ -26,6 +26,12 @@
     "express": "^4.16.2"
   },
   "jest": {
-    "testResultsProcessor": "./node_modules/jest-junit"
+    "testResultsProcessor": "./node_modules/jest-junit",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!index.js",
+    ]
   }
 }
