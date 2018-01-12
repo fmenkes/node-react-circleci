@@ -1,4 +1,4 @@
-const sum = require('../tools');
+const sum = require('../../tools');
 
 describe('Example test', () => {
   it('should return the correct sum', () => {

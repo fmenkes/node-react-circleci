@@ -24,5 +24,8 @@
   },
   "dependencies": {
     "express": "^4.16.2"
+  },
+  "jest": {
+    "testResultsProcessor": "./node_modules/jest-junit"
   }
 }
