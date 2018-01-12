@@ -22,7 +22,6 @@
     "jest-junit": "^3.4.1"
   },
   "jest": {
-    "testResultsProcessor": "./node_modules/jest-junit",
     "collectCoverageFrom": [
       "**/*.js",
       "!**/node_modules/**",
