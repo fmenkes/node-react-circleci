@@ -187,19 +187,19 @@ workflows:
       - eslint:
           requires:
             - unit-tests
-      - integration-tests:
+      - backend-integration:
           requires:
             - unit-tests
       - staging:
           requires:
-            - integration-tests
+            - backend-integration
           filters:
             branches:
               only: master
       - release:
           type: approval
           requires:
-            - integration-tests
+            - backend-integration
           filters:
             branches:
               only: master
