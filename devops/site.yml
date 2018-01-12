@@ -1,5 +1,5 @@
 ---
-- hosts: slotmachine
+- hosts: server
   become: yes
   roles:
-    - slotmachine
+    - server

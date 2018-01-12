@@ -1,7 +1,7 @@
 version: "2"
 
 networks:
-  coinflippers:
+  docker:
 
 services:
   web:
@@ -10,9 +10,9 @@ services:
     expose:
       - "8080"
     networks:
-      coinflippers:
+      docker:
         aliases:
-          - slotmachine
+          - node
     links:
       - mongo
     environment:
@@ -34,7 +34,7 @@ services:
     volumes_from:
       - mongodata
     networks:
-      - coinflippers
+      - docker
 
   mongodata:
     image: tianon/true
@@ -49,4 +49,4 @@ services:
     ports:
       - 80:80
     networks:
-      - coinflippers
+      - docker

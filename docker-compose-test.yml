@@ -2,12 +2,12 @@ version: '2'
 
 services:
   web:
-    image: coinflippers/slotmachine
+    image: fmenkes/node-react-circleci
     container_name: web
     links:
       - mongo
     environment:
-      - MONGO_DB_URI=mongodb://mongo:27017/slotmachine-test
+      - MONGO_DB_URI=mongodb://mongo:27017/web-test
     command: npm run test:integration
 
   mongo:
