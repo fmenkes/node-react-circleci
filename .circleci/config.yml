@@ -2,7 +2,8 @@ version: 2
 jobs:
   unit-tests:
     docker:
-      - image: node:8.9.4-alpine
+      # node:8.9.4-alpine but with HTTPS enabled
+      - image: fmenkes/node-alpine:8.9.4
     working_directory: ~/project/backend
     steps:
       - checkout:
@@ -45,7 +46,7 @@ jobs:
 
   eslint:
     docker:
-      - image: node:8.9.4-alpine
+      - image: fmenkes/node-alpine:8.9.4
     working_directory: ~/project/backend
     steps:
       - attach_workspace:
