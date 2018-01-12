@@ -126,8 +126,8 @@ jobs:
   staging:
     docker:
       - image: fmenkes/ansible-git
-      - environment:
-          - ANSIBLE_HOST_KEY_CHECKING: "False"
+    environment:
+      - ANSIBLE_HOST_KEY_CHECKING: "False"
     steps:
       - checkout
       - run:
