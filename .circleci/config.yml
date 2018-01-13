@@ -147,8 +147,9 @@ jobs:
       - ANSIBLE_HOST_KEY_CHECKING: "False"
     working_directory: ~/project
     steps:
+      - checkout
       - attach_workspace:
-          at: ~/project
+          at: ~/project/frontend
       - run:
           name: Append variables to host_vars file
           command: |
