@@ -47,7 +47,7 @@ jobs:
           command: yarn build
       - persist_to_workspace:
           root: ~/project
-          paths: frontend
+          paths: frontend/build
 
   node-unit:
     docker:
@@ -80,9 +80,6 @@ jobs:
           path: reports
       - store_artifacts:
           path: coverage
-      - persist_to_workspace:
-          root: ~/project
-          paths: backend
 
   node-integration:
     docker:
@@ -149,7 +146,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/project/frontend
+          at: ~/project
       - run:
           name: Append variables to host_vars file
           command: |
