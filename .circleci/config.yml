@@ -21,10 +21,10 @@ jobs:
             - node_modules/
       - run:
           name: Run eslint
-          command: yarn lint -o reports/eslint.xml -f junit .
+          command: yarn lint -o reports/eslint.xml -f junit src
       - run:
           name: Run unit tests with coverage
-          command: yarn test:unit
+          command: yarn test --coverage
       - store_test_results:
           path: reports
       - store_artifacts:
