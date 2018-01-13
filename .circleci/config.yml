@@ -43,6 +43,10 @@ jobs:
       - attach_workspace:
           at: ~/project
       - run:
+          name: Append variables to .env file
+          command: |
+            echo "REACT_APP_STAGING_URL=${STAGING_URL}" >> .env
+      - run:
           name: Build React app
           command: yarn build
       - persist_to_workspace:

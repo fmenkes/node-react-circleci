@@ -17,7 +17,7 @@ class App extends Component {
 
     const url = process.env.NODE_ENV === 'development' ?
       'http://localhost:8080/test' :
-      'http://localhost/api/test';
+      `http://${process.env.REACT_APP_STAGING_URL}/api/test`;
 
     fetch(url)
       .then(response => (
