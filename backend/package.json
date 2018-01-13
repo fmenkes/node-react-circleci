@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "lint": "eslint",
     "test:unit": "jest unit --coverage",
     "test:integration": "jest int --forceExit"
@@ -21,9 +22,11 @@
     "eslint-plugin-import": "^2.8.0",
     "jest": "^22.0.6",
     "jest-junit": "^3.4.1",
+    "nodemon": "^1.14.11",
     "supertest": "^3.0.0"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.2"
   },
   "jest": {
