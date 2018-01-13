@@ -61,6 +61,8 @@ jobs:
           name: copy eslint.xml to artifact folder
           command: cp eslint.xml ~/eslint/eslint.xml
           when: always
+      - store_test_results:
+          path: ~/eslint
       - store_artifacts:
           path: ~/eslint
 
