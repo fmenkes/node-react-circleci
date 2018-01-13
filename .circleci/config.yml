@@ -3,7 +3,7 @@ jobs:
   react-unit:
     docker:
       - image: fmenkes/node-alpine:8.9.4
-    working_directory: ~/project/fronted
+    working_directory: ~/project/frontend
     steps:
       - checkout:
           path: ~/project
