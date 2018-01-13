@@ -19,8 +19,13 @@
 - name: Login to Docker Hub
   shell: docker login -u {{ DOCKER_USER }} -p {{ DOCKER_PASSWORD }}
 
-- name: Pull Docker Hub image
+- name: Pull backend Docker Hub image
   shell: docker pull {{ docker_image }}
+
+- name: Copy frontend build folder
+  copy:
+    src: "{{ circleci_working_directory }}/frontend/build/"
+    dest: "{{ working_directory }}/build/"
 
 - name: Copy docker-compose file
   template:

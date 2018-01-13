@@ -91,7 +91,8 @@
   },
   "jest-junit": {
     "classNameTemplate": "{classname}",
-    "titleTemplate": "{title}"
+    "titleTemplate": "{title}",
+    "output": "./reports/junit.xml"
   },
   "babel": {
     "presets": [

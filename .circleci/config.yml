@@ -35,6 +35,20 @@ jobs:
           root: ~/project
           paths: frontend
 
+  react-build:
+    docker:
+      - image: fmenkes/node-alpine:8.9.4
+    working_directory: ~/project/frontend
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Build React app
+          command: yarn build
+      - persist_to_workspace:
+          root: ~/project
+          paths: frontend
+
   node-unit:
     docker:
       - image: fmenkes/node-alpine:8.9.4
@@ -101,14 +115,13 @@ jobs:
             - /caches/app.tar
       - run: 
           name: Create test directory
-          command: mkdir ~/junit
+          command: mkdir reports
       - run:
           name: Run tests
           command: docker-compose -f docker-compose-test.yml up --abort-on-container-exit
       - run:
           name: Copy test results to artifact folder
-          command: |
-            docker cp web:${WORKING_DIRECTORY}/junit.xml ~/junit/junit.xml
+          command: docker cp web:${WORKING_DIRECTORY}/reports/junit.xml reports/junit.xml
           when: always
       - run:
           name: Login to Docker Hub
@@ -123,18 +136,19 @@ jobs:
               docker push $DOCKER_IMAGE
             fi
       - store_test_results:
-          path: ~/junit
+          path: reports
       - store_artifacts:
-          path: ~/junit
-          directory: tests
+          path: reports
 
   staging:
     docker:
       - image: fmenkes/ansible-git
     environment:
       - ANSIBLE_HOST_KEY_CHECKING: "False"
+    working_directory: ~/project
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/project
       - run:
           name: Append variables to host_vars file
           command: |
@@ -196,9 +210,13 @@ workflows:
       - node-integration:
           requires:
             - node-unit
+      - react-build:
+          requires:
+            - react-unit
       - staging:
           requires:
             - node-integration
+            - react-build
           filters:
             branches:
               only: master
