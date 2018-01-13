@@ -17,7 +17,7 @@ class App extends Component {
 
     const url = process.env.NODE_ENV === 'development' ?
       'http://localhost:8080/test' :
-      'http://node:80/api/test';
+      'http://node:8080/test';
 
     fetch(url)
       .then(response => (
