@@ -9,6 +9,6 @@ services:
     command: yarn test:integration
 
   mongo:
-    image: mongo:3.4.10-jessie
+    image: circleci/mongo
     expose:
       - "27017"

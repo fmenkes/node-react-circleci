@@ -119,7 +119,7 @@ jobs:
           command: mkdir reports
       - run:
           name: Run tests
-          command: docker-compose -f docker-compose-test.yml up --abort-on-container-exit
+          command: docker-compose -f .circleci/node/docker-compose.yml up --abort-on-container-exit
       - run:
           name: Copy test results to artifact folder
           command: docker cp web:${WORKING_DIRECTORY}/reports/junit.xml reports/junit.xml
