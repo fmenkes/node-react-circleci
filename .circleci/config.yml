@@ -1,8 +1,42 @@
 version: 2
 jobs:
-  unit-tests:
+  react-unit:
     docker:
-      # node:8.9.4-alpine but with HTTPS enabled
+      - image: fmenkes/node-alpine:8.9.4
+    working_directory: ~/project/fronted
+    steps:
+      - checkout:
+          path: ~/project
+      - restore_cache:
+          keys:
+            - yarn-cache-frontend-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-frontend-{{ .Branch }}-
+            - yarn-cache-frontend-
+      - run:
+          name: Install dependencies
+          command: yarn
+      - save_cache:
+          key: yarn-cache-frontend-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules/
+      - run:
+          name: Run eslint
+          command: yarn lint -o reports/eslint.xml -f junit .
+      - run:
+          name: Run unit tests with coverage
+          command: yarn test:unit
+      - store_test_results:
+          path: reports
+      - store_artifacts:
+          path: reports
+      - store_artifacts:
+          path: coverage
+      - persist_to_workspace:
+          root: ~/project
+          paths: frontend
+
+  node-unit:
+    docker:
       - image: fmenkes/node-alpine:8.9.4
     working_directory: ~/project/backend
     steps:
@@ -10,63 +44,33 @@ jobs:
           path: ~/project
       - restore_cache:
           keys: 
-            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache-{{ .Branch }}-
-            - yarn-cache-
+            - yarn-cache-backend-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-backend-{{ .Branch }}-
+            - yarn-cache-backend-
       - run:
           name: Install dependencies
           command: yarn
       - save_cache:
-          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-cache-backend-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
-            - "~/.cache/yarn/v1"
-      - run: 
-          name: Create test and coverage directories
-          command: |
-            mkdir ~/junit
-            mkdir ~/coverage
+            - node_modules/
+      - run:
+          name: Run eslint
+          command: yarn lint -o reports/eslint.xml -f junit .
       - run:
           name: Run unit tests with coverage
           command: yarn test:unit
-      - run:
-          name: Copy test results and coverage to artifact folders
-          command: |
-            cp junit.xml ~/junit/junit.xml
-            cp -a coverage/. ~/coverage/
-          when: always
       - store_test_results:
-          path: ~/junit
+          path: reports
       - store_artifacts:
-          path: ~/junit
+          path: reports
       - store_artifacts:
-          path: ~/coverage
+          path: coverage
       - persist_to_workspace:
           root: ~/project
-          paths: .
+          paths: backend
 
-  eslint:
-    docker:
-      - image: fmenkes/node-alpine:8.9.4
-    working_directory: ~/project/backend
-    steps:
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Create eslint directory
-          command: mkdir ~/eslint
-      - run:
-          name: eslint
-          command: yarn lint -o eslint.xml -f junit .
-      - run:
-          name: copy eslint.xml to artifact folder
-          command: cp eslint.xml ~/eslint/eslint.xml
-          when: always
-      - store_test_results:
-          path: ~/eslint
-      - store_artifacts:
-          path: ~/eslint
-
-  backend-integration:
+  node-integration:
     docker:
       - image: fmenkes/docker-compose-git
     steps:
@@ -187,23 +191,21 @@ workflows:
   version: 2
   circleci:
     jobs:
-      - unit-tests
-      - eslint:
+      - node-unit
+      - react-unit
+      - node-integration:
           requires:
-            - unit-tests
-      - backend-integration:
-          requires:
-            - unit-tests
+            - node-unit
       - staging:
           requires:
-            - backend-integration
+            - node-integration
           filters:
             branches:
               only: master
       - release:
           type: approval
           requires:
-            - backend-integration
+            - node-integration
           filters:
             branches:
               only: master

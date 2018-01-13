@@ -36,7 +36,8 @@
     ]
   },
   "jest-junit": {
-    "classNameTemplate": "{title}",
-    "titleTemplate": "{title}"
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}",
+    "output": "./reports/junit.xml"
   }
 }
