@@ -1,5 +1,5 @@
 ---
-- hosts: backend
+- hosts: circleci
   become: yes
   roles:
-    - backend
+    - circleci
