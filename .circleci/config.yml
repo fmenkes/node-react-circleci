@@ -56,10 +56,10 @@ jobs:
           command: mkdir ~/eslint
       - run:
           name: eslint
-          command: yarn lint
+          command: yarn lint -o eslint.xml -f junit .
       - run:
-          name: copy eslint.html to artifact folder
-          command: cp eslint.html ~/eslint/eslint.html
+          name: copy eslint.xml to artifact folder
+          command: cp eslint.xml ~/eslint/eslint.xml
           when: always
       - store_artifacts:
           path: ~/eslint

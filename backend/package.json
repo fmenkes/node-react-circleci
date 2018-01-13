@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "lint": "eslint -o eslint.html -f html .",
+    "lint": "eslint",
     "test:unit": "jest unit --coverage",
     "test:integration": "jest int --forceExit"
   },
