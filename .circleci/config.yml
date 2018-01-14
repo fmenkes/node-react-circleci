@@ -122,7 +122,7 @@ jobs:
           command: docker-compose -f .circleci/node/docker-compose.yml up --abort-on-container-exit
       - run:
           name: Copy test results to artifact folder
-          command: docker cp web:${WORKING_DIRECTORY}/reports/junit.xml reports/junit.xml
+          command: docker cp test:${WORKING_DIRECTORY}/reports/junit.xml reports/junit.xml
           when: always
       - run:
           name: Login to Docker Hub
@@ -157,9 +157,9 @@ jobs:
             echo "working_directory: ${WORKING_DIRECTORY}
             docker_image: ${DOCKER_IMAGE}
             ansible_host: ${STAGING_URL}
-            ansible_user: ${BACKEND_STAGING_ANSIBLE_USER}
+            ansible_user: ${STAGING_ANSIBLE_USER}
             DOCKER_USER: ${DOCKER_USER}
-            DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/staging/host_vars/$ANSIBLE_HOSTNAME
+            DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/staging/host_vars/circleci
       - run: 
           name: Run Ansible playbook
           command: ansible-playbook -i devops/environments/staging/inventory.yml devops/site.yml
@@ -176,32 +176,21 @@ jobs:
             echo "working_directory: ${WORKING_DIRECTORY}
             docker_image: ${DOCKER_IMAGE}
             ansible_host: ${PRODUCTION_URL}
+            ansible_user: ${PRODUCTION_ANSIBLE_USER}
             DOCKER_USER: ${DOCKER_USER}
-            DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/production/host_vars/$ANSIBLE_HOSTNAME
+            DOCKER_PASSWORD: ${DOCKER_PASSWORD}" >> devops/environments/production/host_vars/circleci
       - run: 
           name: Run Ansible playbook
           command: ansible-playbook -i devops/environments/production/inventory.yml devops/site.yml
-      - persist_to_workspace:
-          root: .
-          paths: .
 
   smoke-test:
     docker:
       - image: fmenkes/ansible-git
-    working_directory: ~/circleci
     steps:
-      - attach_workspace:
-          at: ~/circleci
       - run:
           name: Smoke test
           command: '[ "$(eval curl -L -s -o /dev/null -w "%{http_code}" ${PRODUCTION_URL})" -eq "200" ]'
           no_output_timeout: "15s"
-      - run:
-          name: Rollback
-          command: |
-            git checkout HEAD~1
-            ansible-playbook -i devops/environments/production/inventory.yml devops/site.yml
-          when: on_fail
   
 workflows:
   version: 2

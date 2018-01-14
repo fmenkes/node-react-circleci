@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  web:
+  test:
     image: ${DOCKER_IMAGE}
-    container_name: web
+    container_name: test
     environment:
       - MONGO_DB_URI=mongodb://mongo:27017/test-db
     command: yarn test:integration
